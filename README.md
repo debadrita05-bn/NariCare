@@ -1,4 +1,4 @@
-# Project: projectnaricare
+# PROJECT NARICARE
 Project NariCare is a private, AI-powered health companion designed for women. It provides personalized health assessments, cycle tracking, symptom logging, and an empathetic AI chat companion — all without requiring sign-up or sending data to a server.
 
 ## Features
