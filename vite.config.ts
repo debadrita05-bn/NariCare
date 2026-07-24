@@ -20,9 +20,7 @@ export default defineConfig(({ command, mode }) => {
     plugins.push(
       nitro({
         preset: process.env.VERCEL ? "vercel" : "cloudflare-pages",
-        externals: {
-          inline: ["tslib"]
-        }
+        noExternals: true
       }),
     );
   }

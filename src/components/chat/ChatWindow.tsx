@@ -92,7 +92,7 @@ export function ChatWindow({
 
   const { messages, sendMessage, status } = useChat({
     id: thread.id,
-    messages: initialMessages,
+    initialMessages,
     transport,
   });
 
