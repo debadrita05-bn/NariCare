@@ -3,8 +3,5 @@
   "launcherType": "Nodejs",
   "shouldAddHelpers": false,
   "supportsResponseStreaming": true,
-  "**": {
-    "includeFiles": "**/*.mjs"
-  },
   "runtime": "nodejs24.x"
 }

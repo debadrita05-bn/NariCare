@@ -10,7 +10,9 @@ export default defineConfig(({ command }) => {
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
     tanstackStart({
-      server: { entry: "server" },
+      server: {
+        entry: "server",
+      },
     }),
     react(),
   ];
@@ -18,13 +20,8 @@ export default defineConfig(({ command }) => {
   if (command === "build") {
     plugins.push(
       nitro({
-        preset: process.env.VERCEL ? "vercel" : "cloudflare-pages",
-        vercel: {
-          functions: {
-            "**": { includeFiles: "**/*.mjs" }
-          }
-        }
-      }),
+        preset: process.env.VERCEL ? "vercel" : "cloudflare-pages"
+      })
     );
   }
 
@@ -35,6 +32,9 @@ export default defineConfig(({ command }) => {
         tslib: "tslib/tslib.es6.mjs",
       },
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
+    },
+    ssr: {
+      noExternal: ["recharts", "lucide-react"],
     },
   };
 });
