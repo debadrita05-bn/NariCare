@@ -20,6 +20,9 @@ export default defineConfig(({ command, mode }) => {
     plugins.push(
       nitro({
         preset: process.env.VERCEL ? "vercel" : "cloudflare-pages",
+        externals: {
+          inline: ["tslib"]
+        }
       }),
     );
   }
@@ -27,10 +30,13 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins,
     resolve: {
+      alias: {
+        tslib: "tslib/tslib.es6.mjs",
+      },
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
     },
     ssr: {
-      noExternal: ["tslib"],
+      noExternal: true,
     },
   };
 });
