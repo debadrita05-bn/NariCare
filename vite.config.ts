@@ -15,11 +15,11 @@ export default defineConfig(({ command, mode }) => {
     react(),
   ];
 
-  // Only include Nitro for production builds (Cloudflare target)
+  // Automatically use 'vercel' preset when building on Vercel, otherwise 'cloudflare-pages'
   if (command === "build") {
     plugins.push(
       nitro({
-        preset: "cloudflare-pages",
+        preset: process.env.VERCEL ? "vercel" : "cloudflare-pages",
       }),
     );
   }
