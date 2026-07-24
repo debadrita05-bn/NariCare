@@ -62,7 +62,14 @@ function consumeLastCapturedError() {
 	return error;
 }
 function renderErrorPage(error) {
-	const errorDetails = error instanceof Error ? error.stack || error.message : String(error || "");
+	let errorDetails = "";
+	if (error instanceof Error) errorDetails = error.stack || error.message;
+	else if (typeof error === "object" && error !== null) try {
+		errorDetails = JSON.stringify(error, Object.getOwnPropertyNames(error), 2);
+	} catch {
+		errorDetails = String(error);
+	}
+	else errorDetails = String(error || "");
 	return `<!doctype html>
 <html lang="en">
   <head>
@@ -176,7 +183,7 @@ function renderErrorPage(error) {
 }
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-ByXJ0NFl.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-B6po5bYr.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
