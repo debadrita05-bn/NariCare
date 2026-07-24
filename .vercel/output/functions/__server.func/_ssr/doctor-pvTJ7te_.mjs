@@ -6,7 +6,8 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { o as motion, s as AnimatePresence } from "../_libs/framer-motion.mjs";
 import { _ as Check, l as MessageCircle, m as ClipboardList, r as Sparkles } from "../_libs/lucide-react.mjs";
 import { t as useAssessment } from "./useAssessment-DoSaFQSy.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/doctor-9QUG5Nml.js
+import { i as PageHeaderSkeleton, n as DoctorSkeleton } from "./page-skeleton-HN2_d5b_.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/doctor-pvTJ7te_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckableItem({ text, index, isQuestion = false }) {
@@ -49,6 +50,13 @@ function CheckableItem({ text, index, isQuestion = false }) {
 }
 function DoctorPage() {
 	const { assessment, ready } = useAssessment();
+	if (!ready) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "mx-auto max-w-4xl px-6 py-16",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PageHeaderSkeleton, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mt-12",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DoctorSkeleton, {})
+		})]
+	});
 	const tests = [];
 	const questions = [];
 	const bring = ["Your cycle tracker log (from NariCare or a paper diary)"];

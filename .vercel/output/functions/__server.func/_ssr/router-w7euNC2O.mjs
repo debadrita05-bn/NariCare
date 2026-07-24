@@ -3,8 +3,8 @@ import { a as require_react, i as streamText, r as convertToModelMessages } from
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useLocation, m as createFileRoute, p as lazyRouteComponent, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { a as DialogOverlay, c as DialogTrigger, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { n as SYSTEM_PROMPT, t as Route$8 } from "./ask._threadId-kG01AQt7.mjs";
-import { o as motion } from "../_libs/framer-motion.mjs";
+import { n as SYSTEM_PROMPT, t as Route$8 } from "./ask._threadId-CoUvzW3R.mjs";
+import { o as motion, s as AnimatePresence } from "../_libs/framer-motion.mjs";
 import { t as X, u as Menu } from "../_libs/lucide-react.mjs";
 import { t as flower_default } from "./flower-B06oMxf0.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
@@ -12,29 +12,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { t as createOpenAICompatible } from "../_libs/ai-sdk__openai-compatible.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-AJYW8fdW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-w7euNC2O.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-DYPE4wTE.css";
+var styles_default = "/assets/styles-Cs2lpabF.css";
 var logo_default = "/assets/logo-DpPLcrum.png";
-function reportLovableError(error, context = {}) {
-	if (typeof window === "undefined") return;
-	window.__lovableEvents?.captureException?.(error, {
-		source: "react_error_boundary",
-		route: window.location.pathname,
-		...context
-	}, {
-		mechanism: "react_error_boundary",
-		handled: false,
-		severity: "error"
-	});
-	const message = error instanceof Response ? `Response ${error.status}${error.url ? ` at ${error.url}` : ""}` : error instanceof Error ? error.message : String(error);
-	window.__lovableReportRuntimeError?.({
-		message,
-		stack: error instanceof Error ? error.stack : void 0,
-		filename: window.location.pathname
-	});
-}
 function AnimatedBackground() {
 	const ghosts = (0, import_react.useMemo)(() => {
 		const rand = (min, max) => Math.random() * (max - min) + min;
@@ -306,40 +288,43 @@ function SiteHeader() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
 		className: "sticky top-0 z-40 border-b border-hairline bg-[#1c1220]/60 backdrop-blur-xl",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "mx-auto flex max-w-7xl items-center justify-between px-6 py-4",
+			className: "mx-auto grid max-w-7xl grid-cols-2 items-center px-6 py-4 md:grid-cols-[1fr_auto_1fr]",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-					to: "/",
-					className: "flex items-center gap-4 group",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "NariCare logo",
-						width: 56,
-						height: 56,
-						className: "h-10 w-10 shrink-0 rounded-xl object-cover ring-1 ring-hairline/50 transition-transform group-hover:scale-105 group-hover:ring-accent-gold-soft/50 shadow-lg shadow-accent-gold-soft/10",
-						draggable: false
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-col leading-none",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "font-serif text-lg font-semibold tracking-tight",
-							children: "NariCare"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground",
-							children: "Cycle · Health · Care"
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex items-center justify-start",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/",
+						className: "flex items-center gap-4 group",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "NariCare logo",
+							width: 56,
+							height: 56,
+							className: "h-10 w-10 shrink-0 rounded-xl object-cover ring-1 ring-hairline/50 transition-transform group-hover:scale-105 group-hover:ring-accent-gold-soft/50 shadow-lg shadow-accent-gold-soft/10",
+							draggable: false
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col leading-none",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-serif text-lg font-semibold tracking-tight",
+								children: "NariCare"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground",
+								children: "Cycle · Health · Care"
+							})]
 						})]
-					})]
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
-					className: "hidden items-center gap-8 text-sm text-muted-foreground md:flex",
+					className: "hidden items-center justify-center gap-1 text-sm font-medium text-muted-foreground md:flex bg-white/[0.03] border border-white/10 rounded-full px-2 py-1.5 shadow-sm backdrop-blur-md",
 					children: links.map((l) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: l.to,
-						className: "nav-link transition-colors hover:text-accent-gold-soft",
-						activeProps: { className: "nav-link is-active text-accent-gold-soft" },
+						className: "rounded-full px-4 py-2 transition-all hover:bg-white/10 hover:text-accent-gold-soft",
+						activeProps: { className: "bg-white/10 text-accent-gold-soft shadow-inner" },
 						children: l.label
 					}, l.to))
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-4",
+					className: "flex items-center justify-end gap-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/assessment",
 						className: "hidden btn-primary-glow items-center rounded-full px-5 py-2.5 text-sm font-semibold md:inline-flex",
@@ -427,7 +412,26 @@ function SiteFooter() {
 function NotFoundComponent() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center px-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+			initial: {
+				opacity: 0,
+				y: 20,
+				scale: .96
+			},
+			animate: {
+				opacity: 1,
+				y: 0,
+				scale: 1
+			},
+			transition: {
+				duration: .5,
+				ease: [
+					.16,
+					1,
+					.3,
+					1
+				]
+			},
 			className: "max-w-md text-center",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
@@ -455,14 +459,32 @@ function NotFoundComponent() {
 	});
 }
 function ErrorComponent({ error, reset }) {
-	console.error(error);
 	const router = useRouter();
 	(0, import_react.useEffect)(() => {
-		reportLovableError(error, { boundary: "tanstack_root_error_component" });
+		console.error("[NariCare Error Boundary]", error);
 	}, [error]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center px-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+			initial: {
+				opacity: 0,
+				y: 20,
+				scale: .96
+			},
+			animate: {
+				opacity: 1,
+				y: 0,
+				scale: 1
+			},
+			transition: {
+				duration: .5,
+				ease: [
+					.16,
+					1,
+					.3,
+					1
+				]
+			},
 			className: "max-w-md text-center",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
@@ -471,7 +493,7 @@ function ErrorComponent({ error, reset }) {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-base font-medium text-foreground",
-					children: "something error happend with this response"
+					children: "Something went wrong with this response"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-4 rounded-xl border border-hairline bg-surface p-4 text-left shadow-inner",
@@ -491,7 +513,7 @@ function ErrorComponent({ error, reset }) {
 						children: "Try again"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 						href: "/",
-						className: "inline-flex items-center rounded-full border border-hairline px-5 py-2.5 text-sm font-semibold text-foreground hover:border-accent-gold-soft hover:text-accent-gold-soft",
+						className: "inline-flex items-center rounded-full border border-hairline px-5 py-2.5 text-sm font-semibold text-foreground hover:border-accent-gold-soft hover:text-accent-gold-soft transition-colors",
 						children: "Go home"
 					})]
 				})
@@ -529,8 +551,16 @@ var Route$7 = createRootRouteWithContext()({
 				content: "website"
 			},
 			{
+				property: "og:image",
+				content: "/og-image.png"
+			},
+			{
 				name: "twitter:card",
 				content: "summary_large_image"
+			},
+			{
+				name: "twitter:image",
+				content: "/social-banner.png"
 			}
 		],
 		links: [
@@ -569,6 +599,42 @@ function RootShell({ children }) {
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("head", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", { children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})] })]
 	});
 }
+/** Page transition variants */
+var pageVariants = {
+	initial: {
+		opacity: 0,
+		y: 6,
+		filter: "blur(4px)"
+	},
+	enter: {
+		opacity: 1,
+		y: 0,
+		filter: "blur(0px)",
+		transition: {
+			duration: .35,
+			ease: [
+				.16,
+				1,
+				.3,
+				1
+			]
+		}
+	},
+	exit: {
+		opacity: 0,
+		y: -4,
+		filter: "blur(2px)",
+		transition: {
+			duration: .2,
+			ease: [
+				.4,
+				0,
+				1,
+				1
+			]
+		}
+	}
+};
 function RootComponent() {
 	const { queryClient } = Route$7.useRouteContext();
 	const location = useLocation();
@@ -580,31 +646,24 @@ function RootComponent() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SiteHeader, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
 					className: "flex-1 relative",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
-						initial: {
-							opacity: 0,
-							filter: "blur(8px)",
-							scale: .98
-						},
-						animate: {
-							opacity: 1,
-							filter: "blur(0px)",
-							scale: 1
-						},
-						transition: {
-							duration: .4,
-							ease: "easeOut"
-						},
-						className: "h-full",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
-					}, location.pathname)
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
+						mode: "wait",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+							variants: pageVariants,
+							initial: "initial",
+							animate: "enter",
+							exit: "exit",
+							className: "h-full",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
+						}, location.pathname)
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SiteFooter, {})
 			]
 		})]
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-BeaFdsqy.mjs");
+var $$splitComponentImporter$5 = () => import("./routes-RolP9kxz.mjs");
 var Route$6 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "NariCare — A gentle AI health companion for every Nari" }, {
 		name: "description",
@@ -631,7 +690,7 @@ var Route$5 = createFileRoute("/assessment")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$4, "component")
 });
-var $$splitComponentImporter$3 = () => import("./doctor-9QUG5Nml.mjs");
+var $$splitComponentImporter$3 = () => import("./doctor-pvTJ7te_.mjs");
 var Route$4 = createFileRoute("/doctor")({
 	head: () => ({ meta: [{ title: "Doctor Visit Prep · NariCare" }, {
 		name: "description",
@@ -647,7 +706,7 @@ var Route$3 = createFileRoute("/history")({
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./tracker-CgakHyDl.mjs");
+var $$splitComponentImporter$1 = () => import("./tracker-C_br0LS9.mjs");
 var Route$2 = createFileRoute("/tracker")({
 	head: () => ({ meta: [
 		{ title: "Cycle Tracker · NariCare" },
@@ -685,7 +744,7 @@ var Route$1 = createFileRoute("/api/chat")({ server: { handlers: { POST: async (
 		temperature: .6
 	}).toUIMessageStreamResponse();
 } } } });
-var $$splitComponentImporter = () => import("./ask.index-ByC41FPb.mjs");
+var $$splitComponentImporter = () => import("./ask.index-BGQF82DQ.mjs");
 var Route = createFileRoute("/ask/")({
 	head: () => ({ meta: [
 		{ title: "Ask Nari · Your AI health companion" },

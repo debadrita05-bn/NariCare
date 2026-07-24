@@ -1,6 +1,6 @@
 import { r as levelOf, t as CATEGORIES } from "./scoring-CpLvIBOI.mjs";
 import { m as createFileRoute, p as lazyRouteComponent } from "../_libs/@tanstack/react-router+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/ask._threadId-kG01AQt7.js
+//#region node_modules/.nitro/vite/services/ssr/assets/ask._threadId-CoUvzW3R.js
 function buildHealthContext(assessments, tracker) {
 	const lines = [];
 	if (assessments.length > 0) {
@@ -54,7 +54,7 @@ Scope:
 - Politely redirect off-topic requests back to women's health.
 
 Format markdown. Keep responses focused — under 250 words unless asked for depth.`;
-var $$splitComponentImporter = () => import("./ask._threadId-DgtwjRm6.mjs");
+var $$splitComponentImporter = () => import("./ask._threadId-95gZHD43.mjs");
 var Route = createFileRoute("/ask/$threadId")({
 	head: () => ({ meta: [
 		{ title: "Ask Nari · NariCare" },

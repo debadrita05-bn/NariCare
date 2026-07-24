@@ -7,8 +7,9 @@ import { a as useScroll, i as useMotionValue, n as useSpring, o as motion, r as 
 import { b as BookOpen, f as Heart, h as ClipboardCheck, i as ShieldCheck, l as MessageCircle, p as Flower2, r as Sparkles, v as CalendarHeart, x as ArrowRight } from "../_libs/lucide-react.mjs";
 import { t as useAssessment } from "./useAssessment-DoSaFQSy.mjs";
 import { t as useTracker } from "./useTracker-BlGiOe5d.mjs";
+import { a as TodayForYouSkeleton } from "./page-skeleton-HN2_d5b_.mjs";
 import { t as flower_default } from "./flower-B06oMxf0.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BeaFdsqy.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-RolP9kxz.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 /**
@@ -206,7 +207,7 @@ function TodayForYou() {
 	const { assessment, ready: aReady } = useAssessment();
 	const { ready: tReady } = useTracker();
 	const nextPeriod = useNextPeriod();
-	if (!aReady || !tReady) return null;
+	if (!aReady || !tReady) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TodayForYouSkeleton, {});
 	const topScore = assessment ? CATEGORIES.map((c) => ({
 		name: c.name,
 		score: assessment.scores[c.key]
@@ -451,7 +452,7 @@ function Home() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.p, {
 								variants: itemFade,
-								className: "mt-8 flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80",
+								className: "mt-8 flex flex-nowrap whitespace-nowrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5 text-accent-gold-soft" }),
 									"No sign-up",

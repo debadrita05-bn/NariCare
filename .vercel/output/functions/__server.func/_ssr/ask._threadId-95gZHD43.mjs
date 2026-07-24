@@ -2,14 +2,14 @@ import { o as __toESM } from "../_runtime.mjs";
 import { a as require_react, n as DefaultChatTransport, t as useChat } from "../_libs/@ai-sdk/react+[...].mjs";
 import { _ as useNavigate, g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { r as buildHealthContext, t as Route } from "./ask._threadId-kG01AQt7.mjs";
+import { r as buildHealthContext, t as Route } from "./ask._threadId-CoUvzW3R.mjs";
 import { n as storage } from "./storage-CKF6nif6.mjs";
 import { o as motion, s as AnimatePresence } from "../_libs/framer-motion.mjs";
 import { a as Send, c as MessageSquare, n as Trash2, r as Sparkles, s as Plus } from "../_libs/lucide-react.mjs";
 import { n as useThreads, t as ChatLockdown } from "./ChatLockdown-DDeTeKj_.mjs";
 import { t as useAssessment } from "./useAssessment-DoSaFQSy.mjs";
 import { t as useTracker } from "./useTracker-BlGiOe5d.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/ask._threadId-DgtwjRm6.js
+//#region node_modules/.nitro/vite/services/ssr/assets/ask._threadId-95gZHD43.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function toUIMessages(msgs) {
@@ -167,7 +167,7 @@ function ChatWindow({ thread, compact = false, onMessagesChanged, onFirstMessage
 								},
 								transition: { delay: .2 },
 								className: "text-sm text-muted-foreground leading-relaxed px-4",
-								children: "I can read your assessment timeline and tracker logs. Ask me anything — about a symptom that's been on your mind, or what to raise at your next doctor visit."
+								children: "Ask me anything — about a symptom that's been on your mind, or what to raise at your next doctor visit."
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
 								initial: { opacity: 0 },

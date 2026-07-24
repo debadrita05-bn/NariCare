@@ -4,7 +4,8 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { o as motion, s as AnimatePresence } from "../_libs/framer-motion.mjs";
 import { n as Trash2, s as Plus, y as CalendarDays } from "../_libs/lucide-react.mjs";
 import { t as useTracker } from "./useTracker-BlGiOe5d.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/tracker-CgakHyDl.js
+import { r as ListSkeleton } from "./page-skeleton-HN2_d5b_.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/tracker-C_br0LS9.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FLOW_OPTIONS = [
@@ -229,7 +230,25 @@ function TrackerPage() {
 				className: "space-y-6",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "grid gap-4 sm:grid-cols-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+						initial: {
+							opacity: 0,
+							y: 16
+						},
+						animate: {
+							opacity: 1,
+							y: 0
+						},
+						transition: {
+							delay: .1,
+							duration: .5,
+							ease: [
+								.16,
+								1,
+								.3,
+								1
+							]
+						},
 						className: "glass-card p-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -245,7 +264,25 @@ function TrackerPage() {
 								children: "Total distinct cycles recorded"
 							})
 						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+						initial: {
+							opacity: 0,
+							y: 16
+						},
+						animate: {
+							opacity: 1,
+							y: 0
+						},
+						transition: {
+							delay: .2,
+							duration: .5,
+							ease: [
+								.16,
+								1,
+								.3,
+								1
+							]
+						},
 						className: "glass-card p-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -267,9 +304,9 @@ function TrackerPage() {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 						className: "font-serif text-lg",
 						children: "Recent entries"
-					}), !ready ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-4 text-sm text-muted-foreground",
-						children: "Loading…"
+					}), !ready ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListSkeleton, { rows: 4 })
 					}) : entries.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-4 text-sm text-muted-foreground",
 						children: "No entries yet. Add today's to get started."
