@@ -29,5 +29,8 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
     },
+    ssr: {
+      noExternal: ["tslib"],
+    },
   };
 });
