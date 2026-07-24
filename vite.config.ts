@@ -33,7 +33,12 @@ export default defineConfig(({ command, mode }) => {
       },
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
     },
-    ssr: command === "build" ? { noExternal: true } : {},
-
+    build: command === "build" ? {
+      rollupOptions: {
+        output: {
+          inlineDynamicImports: true
+        }
+      }
+    } : undefined,
   };
 });

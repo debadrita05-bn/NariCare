@@ -37,4 +37,12 @@ dist-ssr
 !.env.example
 .vercel
 .lovable
-node_modules
+# Testing
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Caches
+.eslintcache
+*.tsbuildinfo
