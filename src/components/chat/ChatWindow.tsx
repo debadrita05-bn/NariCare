@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles } from "lucide-react";
 import { useAssessment } from "@/hooks/useAssessment";
 import { useTracker } from "@/hooks/useTracker";
+import { useThreads } from "@/hooks/useThreads";
 import { buildHealthContext } from "@/lib/health/context";
 import type { ChatThread, ThreadMessage } from "@/lib/storage";
 import { newId } from "@/lib/storage";
@@ -65,20 +66,26 @@ export function ChatWindow({
 }) {
   const { assessments } = useAssessment();
   const { entries } = useTracker();
+  const { threads } = useThreads();
   const healthContext = useMemo(
-    () => buildHealthContext(assessments, entries),
-    [assessments, entries],
+    () => buildHealthContext(assessments, entries, threads, thread.id),
+    [assessments, entries, threads, thread.id],
   );
+
+  const healthContextRef = useRef(healthContext);
+  useEffect(() => {
+    healthContextRef.current = healthContext;
+  }, [healthContext]);
 
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
         api: "/api/chat",
         prepareSendMessagesRequest: ({ messages, body }) => ({
-          body: { messages, healthContext, ...body },
+          body: { messages, healthContext: healthContextRef.current, ...body },
         }),
       }),
-    [healthContext],
+    [],
   );
 
   const initialMessages = useMemo(() => toUIMessages(thread.messages), [thread.id]);

@@ -1,9 +1,11 @@
-import type { SavedAssessment, TrackerEntry } from "../storage";
+import type { SavedAssessment, TrackerEntry, ChatThread } from "../storage";
 import { CATEGORIES, levelOf } from "./scoring";
 
 export function buildHealthContext(
   assessments: SavedAssessment[],
   tracker: TrackerEntry[],
+  pastThreads: ChatThread[] = [],
+  currentThreadId?: string
 ): string {
   const lines: string[] = [];
 
@@ -61,7 +63,25 @@ export function buildHealthContext(
     );
   }
 
-  if (!lines.length) return "No prior assessment or cycle log yet.";
+  if (pastThreads.length > 0) {
+    const previous = pastThreads.filter(t => t.id !== currentThreadId && t.messages.length > 0);
+    if (previous.length > 0) {
+      lines.push(`\nPrevious Conversations (${previous.length} total):`);
+      const sortedThreads = [...previous].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 5); // last 5 threads
+      sortedThreads.forEach((t) => {
+        const date = new Date(t.updatedAt).toISOString().split("T")[0];
+        lines.push(`- [${date}] Topic: "${t.title}"`);
+        const recentMsgs = t.messages.slice(-2);
+        recentMsgs.forEach(m => {
+          const role = m.role === 'user' ? 'User' : 'Nari';
+          const snippet = m.content.length > 100 ? m.content.slice(0, 100) + '...' : m.content;
+          lines.push(`  * ${role}: ${snippet}`);
+        });
+      });
+    }
+  }
+
+  if (!lines.length) return "No prior assessment, cycle log, or past conversation yet.";
   return lines.join("\n");
 }
 

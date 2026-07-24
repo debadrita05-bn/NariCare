@@ -128,7 +128,7 @@ function AskThread() {
 
         {/* Chat */}
         <div className="glass-card overflow-hidden md:h-[640px]">
-          <ChatWindow thread={thread} onMessagesChanged={handleMessages} />
+          <ChatWindow key={thread.id} thread={thread} onMessagesChanged={handleMessages} />
         </div>
       </div>
     </div>
