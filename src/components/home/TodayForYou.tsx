@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { CalendarHeart, Sparkles, MessageCircle } from "lucide-react";
+import { TodayForYouSkeleton } from "@/components/ui/page-skeleton";
 import { useAssessment } from "@/hooks/useAssessment";
 import { useTracker } from "@/hooks/useTracker";
 import { CATEGORIES, levelOf } from "@/lib/health/scoring";
@@ -52,7 +53,7 @@ export function TodayForYou() {
   const { ready: tReady } = useTracker();
   const nextPeriod = useNextPeriod();
 
-  if (!aReady || !tReady) return null;
+  if (!aReady || !tReady) return <TodayForYouSkeleton />;
 
   const topScore = assessment
     ? CATEGORIES.map((c) => ({

@@ -3,6 +3,7 @@ import { useAssessment } from "@/hooks/useAssessment";
 import { CATEGORIES } from "@/lib/health/scoring";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, ClipboardList, Check, Sparkles } from "lucide-react";
+import { DoctorSkeleton, PageHeaderSkeleton } from "@/components/ui/page-skeleton";
 import { useState } from "react";
 
 export const Route = createFileRoute("/doctor")({
@@ -80,6 +81,17 @@ function CheckableItem({
 
 function DoctorPage() {
   const { assessment, ready } = useAssessment();
+
+  if (!ready) {
+    return (
+      <div className="mx-auto max-w-4xl px-6 py-16">
+        <PageHeaderSkeleton />
+        <div className="mt-12">
+          <DoctorSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   const tests: string[] = [];
   const questions: string[] = [];

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useThreads } from "@/hooks/useThreads";
 import { storage } from "@/lib/storage";
 import { ChatLockdown } from "@/components/chat/ChatLockdown";
+import { ChatSkeleton } from "@/components/ui/page-skeleton";
 
 export const Route = createFileRoute("/ask/")({
   head: () => ({
@@ -41,9 +42,5 @@ function AskIndex() {
     return <ChatLockdown />;
   }
 
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center text-muted-foreground">
-      Opening your chat…
-    </div>
-  );
+  return <ChatSkeleton />;
 }

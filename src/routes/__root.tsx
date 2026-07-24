@@ -13,7 +13,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import appCss from "../styles.css?url";
 import logoUrl from "@/assets/logo.png";
-import { reportLovableError } from "../lib/errors/reporting";
 import { AnimatedBackground } from "@/components/visuals/AnimatedBackground";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -21,7 +20,12 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="max-w-md text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-md text-center"
+      >
         <h1 className="font-serif text-7xl text-accent-gold-soft">404</h1>
         <h2 className="mt-4 font-serif text-xl">This page slipped through the cycle.</h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -35,24 +39,29 @@ function NotFoundComponent() {
             Go home
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
   const router = useRouter();
+
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    console.error("[NariCare Error Boundary]", error);
   }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="max-w-md text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-md text-center"
+      >
         <h1 className="font-serif text-2xl text-destructive">Oops!</h1>
         <p className="mt-2 text-base font-medium text-foreground">
-          something error happend with this response
+          Something went wrong with this response
         </p>
         <div className="mt-4 rounded-xl border border-hairline bg-surface p-4 text-left shadow-inner">
           <p className="text-xs font-mono text-muted-foreground break-words">
@@ -71,55 +80,68 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </button>
           <a
             href="/"
-            className="inline-flex items-center rounded-full border border-hairline px-5 py-2.5 text-sm font-semibold text-foreground hover:border-accent-gold-soft hover:text-accent-gold-soft"
+            className="inline-flex items-center rounded-full border border-hairline px-5 py-2.5 text-sm font-semibold text-foreground hover:border-accent-gold-soft hover:text-accent-gold-soft transition-colors"
           >
             Go home
           </a>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NariCare — AI-powered women's cycle & health companion" },
-      {
-        name: "description",
-        content:
-          "NariCare is an AI-powered menstrual & reproductive health hub for women. Run a 3-min risk assessment, track your cycle, ask Nari — your private AI health companion.",
-      },
-      { name: "author", content: "NariCare" },
-      { property: "og:title", content: "NariCare — AI-powered women's cycle & health companion" },
-      {
-        property: "og:description",
-        content:
-          "Run a private risk assessment, track your cycle, chat with Nari the AI companion.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "/og-image.png" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/social-banner.png" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: logoUrl, type: "image/png" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
-      },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
-});
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          title:
+            "NariCare — AI-powered women's cycle & health companion",
+        },
+        {
+          name: "description",
+          content:
+            "NariCare is an AI-powered menstrual & reproductive health hub for women. Run a 3-min risk assessment, track your cycle, ask Nari — your private AI health companion.",
+        },
+        { name: "author", content: "NariCare" },
+        {
+          property: "og:title",
+          content:
+            "NariCare — AI-powered women's cycle & health companion",
+        },
+        {
+          property: "og:description",
+          content:
+            "Run a private risk assessment, track your cycle, chat with Nari the AI companion.",
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: "/og-image.png" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: "/social-banner.png" },
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        { rel: "icon", href: logoUrl, type: "image/png" },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
+        },
+      ],
+    }),
+    shellComponent: RootShell,
+    component: RootComponent,
+    notFoundComponent: NotFoundComponent,
+    errorComponent: ErrorComponent,
+  },
+);
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
@@ -135,6 +157,23 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/** Page transition variants */
+const pageVariants = {
+  initial: { opacity: 0, y: 6, filter: "blur(4px)" },
+  enter: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+  },
+  exit: {
+    opacity: 0,
+    y: -4,
+    filter: "blur(2px)",
+    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+  },
+} as const;
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
@@ -145,15 +184,18 @@ function RootComponent() {
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1 relative">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, filter: "blur(8px)", scale: 0.98 }}
-            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="h-full"
-          >
-            <Outlet />
-          </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              variants={pageVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="h-full"
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
         <SiteFooter />
       </div>

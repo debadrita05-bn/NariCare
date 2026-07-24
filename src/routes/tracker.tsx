@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTracker } from "@/hooks/useTracker";
 import { Trash2, Plus, CalendarDays } from "lucide-react";
+import { ListSkeleton, CardSkeleton } from "@/components/ui/page-skeleton";
 
 export const Route = createFileRoute("/tracker")({
   head: () => ({
@@ -238,14 +239,24 @@ function TrackerPage() {
         {/* SUMMARY + LOG */}
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="glass-card p-6">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-card p-6"
+            >
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
                 <CalendarDays className="h-3.5 w-3.5" /> Periods logged
               </div>
               <div className="mt-2 font-serif text-4xl">{periods.length}</div>
               <p className="mt-1 text-xs text-muted-foreground">Total distinct cycles recorded</p>
-            </div>
-            <div className="glass-card p-6">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-card p-6"
+            >
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-muted-foreground">
                 <CalendarDays className="h-3.5 w-3.5" /> Next predicted
               </div>
@@ -253,13 +264,15 @@ function TrackerPage() {
               <p className="mt-1 text-xs text-muted-foreground">
                 {nextPeriod ? `Avg cycle ${nextPeriod.avg} days` : "Log 2+ periods to predict"}
               </p>
-            </div>
+            </motion.div>
           </div>
 
           <div className="glass-card p-6">
             <h3 className="font-serif text-lg">Recent entries</h3>
             {!ready ? (
-              <p className="mt-4 text-sm text-muted-foreground">Loading…</p>
+              <div className="mt-4">
+                <ListSkeleton rows={4} />
+              </div>
             ) : entries.length === 0 ? (
               <p className="mt-4 text-sm text-muted-foreground">
                 No entries yet. Add today's to get started.
