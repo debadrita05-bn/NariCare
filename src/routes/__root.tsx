@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import logoUrl from "@/assets/logo.png";
@@ -90,58 +91,54 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
-  {
-    head: () => ({
-      meta: [
-        { charSet: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
-        {
-          title:
-            "NariCare — AI-powered women's cycle & health companion",
-        },
-        {
-          name: "description",
-          content:
-            "NariCare is an AI-powered menstrual & reproductive health hub for women. Run a 3-min risk assessment, track your cycle, ask Nari — your private AI health companion.",
-        },
-        { name: "author", content: "NariCare" },
-        {
-          property: "og:title",
-          content:
-            "NariCare — AI-powered women's cycle & health companion",
-        },
-        {
-          property: "og:description",
-          content:
-            "Run a private risk assessment, track your cycle, chat with Nari the AI companion.",
-        },
-        { property: "og:type", content: "website" },
-        { property: "og:image", content: "/og-image.png" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: "/social-banner.png" },
-      ],
-      links: [
-        { rel: "stylesheet", href: appCss },
-        { rel: "icon", href: logoUrl, type: "image/png" },
-        { rel: "preconnect", href: "https://fonts.googleapis.com" },
-        {
-          rel: "preconnect",
-          href: "https://fonts.gstatic.com",
-          crossOrigin: "anonymous",
-        },
-        {
-          rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
-        },
-      ],
-    }),
-    shellComponent: RootShell,
-    component: RootComponent,
-    notFoundComponent: NotFoundComponent,
-    errorComponent: ErrorComponent,
-  },
-);
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        title: "NariCare — AI-powered women's cycle & health companion",
+      },
+      {
+        name: "description",
+        content:
+          "NariCare is an AI-powered menstrual & reproductive health hub for women. Run a 3-min risk assessment, track your cycle, ask Nari — your private AI health companion.",
+      },
+      { name: "author", content: "NariCare" },
+      {
+        property: "og:title",
+        content: "NariCare — AI-powered women's cycle & health companion",
+      },
+      {
+        property: "og:description",
+        content:
+          "Run a private risk assessment, track your cycle, chat with Nari the AI companion.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "/og-image.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/social-banner.png" },
+    ],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: logoUrl, type: "image/png" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
+      },
+    ],
+  }),
+  shellComponent: RootShell,
+  component: RootComponent,
+  notFoundComponent: NotFoundComponent,
+  errorComponent: ErrorComponent,
+});
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
@@ -181,6 +178,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AnimatedBackground />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#2a1d2a",
+            color: "#f6ede8",
+            border: "1px solid rgba(246,237,232,0.1)",
+          },
+        }}
+      />
       <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1 relative">

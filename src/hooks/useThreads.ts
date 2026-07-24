@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { storage, type ChatThread, type ThreadMessage, newId } from "@/lib/storage";
+import { storage, KEYS, type ChatThread, type ThreadMessage, newId } from "@/lib/storage";
 
 export function useThreads() {
   const [threads, setThreads] = useState<ChatThread[]>([]);
@@ -8,6 +8,14 @@ export function useThreads() {
   useEffect(() => {
     setThreads(storage.getThreads());
     setReady(true);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === KEYS.threads) setThreads(storage.getThreads());
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
   }, []);
 
   const persist = useCallback((next: ChatThread[]) => {

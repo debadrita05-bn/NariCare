@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { toast } from "sonner";
 import { RiskBloom } from "@/components/visuals/RiskBloom";
 import { CATEGORIES, computeScores, levelOf } from "@/lib/health/scoring";
 import type { AssessmentRaw, SavedAssessment, Symptom } from "@/lib/storage";
@@ -39,22 +40,36 @@ const SYMPTOMS: { key: Symptom; label: string }[] = [
   { key: "bloating", label: "Bloating" },
   { key: "breastTender", label: "Breast tenderness" },
   { key: "headache", label: "Recurring headaches" },
+  { key: "nausea", label: "Nausea / vomiting during period" },
+  { key: "backPain", label: "Lower back pain during period" },
+  { key: "legPain", label: "Leg pain during period" },
+  { key: "painBowel", label: "Pain during bowel movements" },
+  { key: "painIntercourse", label: "Pain during intercourse" },
+  { key: "pallor", label: "Pale skin / pale nails" },
+  { key: "coldIntolerance", label: "Feeling unusually cold" },
+  { key: "pica", label: "Craving ice / non-food items" },
+  { key: "spotting", label: "Spotting between periods" },
 ];
 
 const emptyRaw: AssessmentRaw = {
   age: 24,
   cycleLength: 28,
   periodLength: 5,
-  variation: -1 as unknown as number, // sentinel for "not selected"
+  variation: -1 as unknown as number,
   missed: -1 as unknown as number,
   pregnancyContext: null,
   flow: -1 as unknown as number,
+  flowObjective: -1 as unknown as number,
   clots: -1 as unknown as number,
   painLevel: 3,
   painInterference: -1 as unknown as number,
   stressLevel: 4,
   sleep: -1 as unknown as number,
   exercise: -1 as unknown as number,
+  height: -1 as unknown as number,
+  weight: -1 as unknown as number,
+  familyPCOS: false,
+  familyEndo: false,
   sym: {
     acne: false,
     hirsutism: false,
@@ -66,6 +81,15 @@ const emptyRaw: AssessmentRaw = {
     bloating: false,
     breastTender: false,
     headache: false,
+    nausea: false,
+    backPain: false,
+    legPain: false,
+    painBowel: false,
+    painIntercourse: false,
+    pallor: false,
+    coldIntolerance: false,
+    pica: false,
+    spotting: false,
   },
 };
 
@@ -91,6 +115,7 @@ function AssessmentPage() {
     }
     if (n === 3) {
       if (raw.flow < 0) return "Pick your flow level.";
+      if (raw.flowObjective < 0) return "Estimate how many pads/tampons you use.";
       if (raw.clots < 0) return "Pick a clots option.";
       if (raw.painInterference < 0) return "Pick a pain-interference option.";
     }
@@ -113,6 +138,7 @@ function AssessmentPage() {
       const scores = computeScores(raw);
       const s: SavedAssessment = { savedAt: Date.now(), raw, scores };
       save(s);
+      toast.success("Assessment saved", { description: "Your results are ready below." });
       setShowResults(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -325,11 +351,42 @@ function Step1({
           min={10}
           max={60}
           value={raw.age || ""}
-          onChange={(e) => set("age", Number(e.target.value))}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            if (v >= 0) set("age", v);
+          }}
+          onBlur={() => {
+            if (raw.age < 10) set("age", 10);
+            else if (raw.age > 60) set("age", 60);
+          }}
           placeholder="e.g. 24"
           className="w-full rounded-xl border border-hairline bg-bg-alt px-4 py-3 text-base focus:border-accent-gold-soft focus:outline-none"
         />
       </Field>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Height (cm, optional)" hint="For BMI context — skip if unsure.">
+          <input
+            type="number"
+            min={100}
+            max={250}
+            value={raw.height > 0 ? raw.height : ""}
+            onChange={(e) => set("height", Number(e.target.value))}
+            placeholder="e.g. 165"
+            className="w-full rounded-xl border border-hairline bg-bg-alt px-4 py-3 text-base focus:border-accent-gold-soft focus:outline-none"
+          />
+        </Field>
+        <Field label="Weight (kg, optional)" hint="Rough estimate is fine.">
+          <input
+            type="number"
+            min={30}
+            max={250}
+            value={raw.weight > 0 ? raw.weight : ""}
+            onChange={(e) => set("weight", Number(e.target.value))}
+            placeholder="e.g. 65"
+            className="w-full rounded-xl border border-hairline bg-bg-alt px-4 py-3 text-base focus:border-accent-gold-soft focus:outline-none"
+          />
+        </Field>
+      </div>
       <Field label="Average cycle length (day 1 to day 1)">
         <Range
           min={15}
@@ -431,6 +488,18 @@ function Step3({
           ]}
         />
       </Field>
+      <Field label="On heavy days, how many pads or tampons do you use?">
+        <Choices<number>
+          value={raw.flowObjective}
+          onChange={(v) => set("flowObjective", v)}
+          options={[
+            { value: 0, label: "0–3 per day" },
+            { value: 1, label: "4–6 per day" },
+            { value: 2, label: "7–9 per day" },
+            { value: 3, label: "10+ per day" },
+          ]}
+        />
+      </Field>
       <Field label="Do you regularly pass large clots?">
         <Choices<number>
           value={raw.clots}
@@ -499,6 +568,42 @@ function Step4({
             </motion.button>
           );
         })}
+      </div>
+      <div className="mt-6 border-t border-hairline/30 pt-6">
+        <Field
+          label="Family history"
+          hint="Select any that apply — genetics play a role in many cycle conditions."
+        >
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              { key: "familyPCOS" as const, label: "PCOS (mother / sister)" },
+              { key: "familyEndo" as const, label: "Endometriosis (mother / sister)" },
+            ].map((f) => {
+              const on = raw[f.key];
+              return (
+                <motion.button
+                  key={f.key}
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => set(f.key, !on)}
+                  className={`flex items-center gap-3 rounded-2xl border px-4 py-4 text-left text-sm transition-colors ${
+                    on
+                      ? "border-transparent bg-gradient-to-br from-primary/90 to-[#a8446a]/90 text-white shadow-lg shadow-primary/20"
+                      : "border-hairline/50 bg-white/5 hover:bg-white/10 text-muted-foreground"
+                  }`}
+                >
+                  <span
+                    className={`flex h-5 w-5 flex-none items-center justify-center rounded-md transition-colors ${on ? "bg-white text-primary shadow-sm" : "border border-hairline/50 bg-black/20"}`}
+                  >
+                    {on && <span className="text-[12px] font-bold">✓</span>}
+                  </span>
+                  {f.label}
+                </motion.button>
+              );
+            })}
+          </div>
+        </Field>
       </div>
     </div>
   );

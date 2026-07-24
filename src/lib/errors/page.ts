@@ -113,7 +113,7 @@ export function renderErrorPage(error?: unknown): string {
       </div>
       <h1>This page didn't load</h1>
       <p>Something went wrong on our end. You can try refreshing or head back home.</p>
-      ${errorDetails ? `<pre style="text-align:left; background:rgba(0,0,0,0.5); padding:1rem; border-radius:8px; overflow:auto; font-size:0.75rem; color:#f87171; margin-bottom:1.5rem;"><code>${errorDetails.replace(/</g, '&lt;')}</code></pre>` : ''}
+      ${errorDetails ? `<pre style="text-align:left; background:rgba(0,0,0,0.5); padding:1rem; border-radius:8px; overflow:auto; font-size:0.75rem; color:#f87171; margin-bottom:1.5rem;"><code>${errorDetails.replace(/</g, "&lt;")}</code></pre>` : ""}
       <div class="actions">
         <button class="primary" onclick="location.reload()">Try again</button>
         <a class="secondary" href="/">Go home</a>

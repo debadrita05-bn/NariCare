@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import { useTracker } from "@/hooks/useTracker";
 import { Trash2, Plus, CalendarDays } from "lucide-react";
 import { ListSkeleton, CardSkeleton } from "@/components/ui/page-skeleton";
@@ -84,6 +85,7 @@ function TrackerPage() {
 
   const submit = () => {
     add({ date, flow, pain, mood, symptoms, note: note || undefined });
+    toast.success("Entry saved", { description: `${date} — ${flow} flow, pain ${pain}/10` });
     setNote("");
     setSymptoms([]);
   };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { storage, type TrackerEntry, newId } from "@/lib/storage";
+import { storage, KEYS, type TrackerEntry, newId } from "@/lib/storage";
 
 export function useTracker() {
   const [entries, setEntries] = useState<TrackerEntry[]>([]);
@@ -8,6 +8,14 @@ export function useTracker() {
   useEffect(() => {
     setEntries(storage.getTracker());
     setReady(true);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === KEYS.tracker) setEntries(storage.getTracker());
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
   }, []);
 
   const add = (partial: Omit<TrackerEntry, "id">) => {

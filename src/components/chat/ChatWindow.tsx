@@ -6,7 +6,7 @@ import { Send, Sparkles } from "lucide-react";
 import { useAssessment } from "@/hooks/useAssessment";
 import { useTracker } from "@/hooks/useTracker";
 import { useThreads } from "@/hooks/useThreads";
-import { buildHealthContext } from "@/lib/health/context";
+import { buildHealthContext, buildContextDepHash } from "@/lib/health/context";
 import type { ChatThread, ThreadMessage } from "@/lib/storage";
 import { newId } from "@/lib/storage";
 
@@ -67,9 +67,13 @@ export function ChatWindow({
   const { assessments } = useAssessment();
   const { entries } = useTracker();
   const { threads } = useThreads();
+  const depHash = useMemo(
+    () => buildContextDepHash(assessments, entries, threads),
+    [assessments, entries, threads],
+  );
   const healthContext = useMemo(
     () => buildHealthContext(assessments, entries, threads, thread.id),
-    [assessments, entries, threads, thread.id],
+    [depHash, thread.id],
   );
 
   const healthContextRef = useRef(healthContext);
@@ -90,11 +94,11 @@ export function ChatWindow({
 
   const initialMessages = useMemo(() => toUIMessages(thread.messages), [thread.id]);
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     id: thread.id,
-    initialMessages,
+    initialMessages: initialMessages as never,
     transport,
-  });
+  } as never);
 
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -175,8 +179,8 @@ export function ChatWindow({
               transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground leading-relaxed px-4"
             >
-              Ask me anything — about a symptom that's been on your mind, or what to raise at
-              your next doctor visit.
+              Ask me anything — about a symptom that's been on your mind, or what to raise at your
+              next doctor visit.
             </motion.p>
 
             <motion.div
@@ -242,6 +246,35 @@ export function ChatWindow({
             <span className="typing-dot" />
             <span className="typing-dot" />
             <span className="text-xs italic text-muted-foreground/80">Nari is thinking…</span>
+          </motion.div>
+        )}
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-auto max-w-md rounded-2xl border border-high/40 bg-high/10 p-5 text-center"
+          >
+            <p className="text-sm text-foreground/90 mb-3">
+              Nari stumbled. {error.message || "Something went wrong with the response."}
+            </p>
+            <button
+              onClick={() => {
+                const userMsgs = messages.filter((m: { role: string }) => m.role === "user");
+                const lastUser = userMsgs[userMsgs.length - 1];
+                if (lastUser) {
+                  const text = lastUser.parts
+                    .map((p: { type: string; text?: string }) =>
+                      p.type === "text" ? (p.text ?? "") : "",
+                    )
+                    .join("");
+                  sendMessage({ text });
+                }
+              }}
+              className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-5 py-2 text-xs font-semibold"
+            >
+              Try again
+            </button>
           </motion.div>
         )}
       </div>

@@ -1,25 +1,46 @@
-import { useEffect, useState } from "react";
-import { storage, type SavedAssessment } from "@/lib/storage";
+import { useCallback, useEffect, useState } from "react";
+import { storage, KEYS, type SavedAssessment } from "@/lib/storage";
+
+function bySavedAtDesc(a: SavedAssessment, b: SavedAssessment) {
+  return b.savedAt - a.savedAt;
+}
+
+function load() {
+  const all = storage.getAssessments().sort(bySavedAtDesc);
+  return { all, latest: all.length > 0 ? all[0] : null };
+}
 
 export function useAssessment() {
   const [assessments, setAssessments] = useState<SavedAssessment[]>([]);
-  const [assessment, setAssessment] = useState<SavedAssessment | null>(null);
+  const [latest, setLatest] = useState<SavedAssessment | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const all = storage.getAssessments();
+    const { all, latest } = load();
     setAssessments(all);
-    setAssessment(all.length > 0 ? all[0] : null);
+    setLatest(latest);
     setReady(true);
   }, []);
 
-  const save = (a: SavedAssessment) => {
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === KEYS.assessment) {
+        const { all, latest } = load();
+        setAssessments(all);
+        setLatest(latest);
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
+  const save = useCallback((a: SavedAssessment) => {
     const all = storage.getAssessments();
-    const next = [a, ...all];
+    const next = [a, ...all].sort(bySavedAtDesc);
     storage.setAssessments(next);
     setAssessments(next);
-    setAssessment(a);
-  };
+    setLatest(a);
+  }, []);
 
-  return { assessment, assessments, save, ready };
+  return { assessment: latest, assessments, latest, save, ready };
 }

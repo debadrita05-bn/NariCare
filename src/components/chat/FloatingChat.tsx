@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Maximize2 } from "lucide-react";
+import { MessageCircle, X, Maximize2, Lock } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { ChatWindow } from "./ChatWindow";
 import { storage, newId, type ChatThread } from "@/lib/storage";
@@ -72,28 +72,49 @@ export function FloatingChat() {
                 </button>
               </div>
             </div>
-            <ChatWindow
-              thread={thread}
-              compact
-              onMessagesChanged={(msgs) => {
-                const all = storage.getThreads();
-                const idx = all.findIndex((t) => t.id === thread.id);
-                const title =
-                  msgs.find((m) => m.role === "user")?.content.slice(0, 40) ?? "Quick chat";
-                const updated: ChatThread = {
-                  ...thread,
-                  messages: msgs,
-                  updatedAt: Date.now(),
-                  title,
-                };
-                if (idx === -1) storage.setThreads([updated, ...all]);
-                else {
-                  const next = [...all];
-                  next[idx] = updated;
-                  storage.setThreads(next);
-                }
-              }}
-            />
+            {storage.getAssessments().length === 0 ? (
+              <div className="flex flex-col items-center justify-center p-8 text-center flex-1">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/5 border border-hairline/50">
+                  <Lock className="h-6 w-6 text-accent-gold-soft" />
+                </div>
+                <h3 className="font-serif text-lg mb-2">Unlock Nari</h3>
+                <p className="text-xs text-muted-foreground mb-6 leading-relaxed max-w-xs">
+                  Take the 3-minute health assessment so Nari knows your context.
+                </p>
+                <Link
+                  to="/assessment"
+                  onClick={() => setOpen(false)}
+                  className="btn-primary-glow inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold"
+                >
+                  Take assessment
+                </Link>
+              </div>
+            ) : (
+              <ChatWindow
+                thread={thread}
+                compact
+                onMessagesChanged={(msgs) => {
+                  const all = storage.getThreads();
+                  const existing = all.find((t) => t.id === thread.id);
+                  const title =
+                    msgs.find((m) => m.role === "user")?.content.slice(0, 40) ?? "Quick chat";
+                  const base = existing ?? thread;
+                  const updated: ChatThread = {
+                    ...base,
+                    messages: msgs,
+                    updatedAt: Date.now(),
+                    title: base.title === "New conversation" ? title : base.title,
+                  };
+                  const idx = all.findIndex((t) => t.id === thread.id);
+                  if (idx === -1) storage.setThreads([updated, ...all]);
+                  else {
+                    const next = [...all];
+                    next[idx] = updated;
+                    storage.setThreads(next);
+                  }
+                }}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

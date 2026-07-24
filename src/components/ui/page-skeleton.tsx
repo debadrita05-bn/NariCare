@@ -11,12 +11,7 @@ function Bone({
   className?: string;
   rounded?: string;
 }) {
-  return (
-    <div
-      className={`skeleton-shimmer bg-white/[0.06] ${rounded} ${className}`}
-      aria-hidden
-    />
-  );
+  return <div className={`skeleton-shimmer bg-white/[0.06] ${rounded} ${className}`} aria-hidden />;
 }
 
 /** Skeleton for a page header: eyebrow + title + subtitle */

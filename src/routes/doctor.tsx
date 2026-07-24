@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAssessment } from "@/hooks/useAssessment";
 import { CATEGORIES } from "@/lib/health/scoring";
+import { storage } from "@/lib/storage";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, ClipboardList, Check, Sparkles } from "lucide-react";
 import { DoctorSkeleton, PageHeaderSkeleton } from "@/components/ui/page-skeleton";
@@ -81,8 +82,10 @@ function CheckableItem({
 
 function DoctorPage() {
   const { assessment, ready } = useAssessment();
+  const cached = !ready ? storage.getAssessments() : null;
+  const a = ready ? assessment : cached && cached.length > 0 ? cached[0] : null;
 
-  if (!ready) {
+  if (!ready && !a) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-16">
         <PageHeaderSkeleton />
@@ -97,8 +100,8 @@ function DoctorPage() {
   const questions: string[] = [];
   const bring: string[] = ["Your cycle tracker log (from NariCare or a paper diary)"];
 
-  if (assessment) {
-    const { scores, raw } = assessment;
+  if (a) {
+    const { scores, raw } = a;
     if (scores.pregnancyFlag) {
       tests.push("Urine or blood pregnancy test (β-hCG)");
       questions.push(
@@ -169,13 +172,13 @@ function DoctorPage() {
           transition={{ delay: 0.2 }}
           className="mt-3 text-muted-foreground"
         >
-          {assessment
+          {a
             ? "Based on your latest scores, here is an interactive checklist for your next appointment."
             : "Take the assessment first for a personalized checklist. General guidance below meanwhile."}
         </motion.p>
       </div>
 
-      {ready && !assessment && (
+      {!a && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

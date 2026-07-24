@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, CalendarDays, Activity } from "lucide-react";
-import { storage } from "@/lib/storage";
+import { storage, type SavedAssessment } from "@/lib/storage";
 import { CATEGORIES, levelOf } from "@/lib/health/scoring";
 import { RiskBloom } from "@/components/visuals/RiskBloom";
+import { ListSkeleton } from "@/components/ui/page-skeleton";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -20,8 +21,24 @@ export const Route = createFileRoute("/history")({
 });
 
 function HistoryPage() {
-  const assessments = storage.getAssessments().sort((a, b) => b.savedAt - a.savedAt);
+  const [assessments, setAssessments] = useState<SavedAssessment[]>([]);
+  const [ready, setReady] = useState(false);
   const [openId, setOpenId] = useState<number | null>(null);
+
+  useEffect(() => {
+    setAssessments(storage.getAssessments().sort((a, b) => b.savedAt - a.savedAt));
+    setReady(true);
+  }, []);
+
+  if (!ready) {
+    return (
+      <div className="mx-auto max-w-4xl px-6 py-16">
+        <div className="space-y-4">
+          <ListSkeleton rows={4} />
+        </div>
+      </div>
+    );
+  }
 
   if (assessments.length === 0) {
     return (
