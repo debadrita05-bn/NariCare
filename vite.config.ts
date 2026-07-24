@@ -33,8 +33,7 @@ export default defineConfig(({ command, mode }) => {
       },
       dedupe: ["react", "react-dom", "@tanstack/react-router"],
     },
-    ssr: {
-      noExternal: true,
-    },
+    ssr: command === "build" ? { noExternal: true } : {},
+
   };
 });

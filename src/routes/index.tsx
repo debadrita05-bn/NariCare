@@ -128,15 +128,16 @@ function Home() {
 
             <motion.p
               variants={itemFade}
-              className="mt-8 flex flex-nowrap whitespace-nowrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80"
+              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80"
             >
-              <ShieldCheck className="h-3.5 w-3.5 text-accent-gold-soft" />
-              No sign-up
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-accent-gold-soft" />
+              <span>No sign-up</span>
               <span className="text-accent-gold-soft/30">·</span>
-              Stays in your browser
+              <span>Stays in your browser</span>
               <span className="text-accent-gold-soft/30">·</span>
-              Private
+              <span>Private</span>
             </motion.p>
+
           </motion.div>
 
           <motion.div

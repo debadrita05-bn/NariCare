@@ -1,6 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useMemo } from "react";
 import flowerUrl from "@/assets/flower.png";
+
+import { useHydrated } from "@/hooks/useHydrated";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Ghost = {
   id: number;
@@ -26,9 +29,19 @@ type Pollen = {
 };
 
 export function AnimatedBackground() {
+  const hydrated = useHydrated();
+  const reduce = useReducedMotion();
+  const isMobile = useIsMobile();
+
+  // Lower density on mobile for perf.
+  const ghostCount = isMobile ? 3 : 6;
+  const pollenCount = isMobile ? 10 : 22;
+
   const ghosts = useMemo<Ghost[]>(() => {
+    // Only compute on the client — Math.random() would otherwise mismatch SSR.
+    if (!hydrated) return [];
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
-    return Array.from({ length: 6 }, (_, i) => ({
+    return Array.from({ length: ghostCount }, (_, i) => ({
       id: i,
       left: `${rand(-8, 90)}%`,
       top: `${rand(-6, 88)}%`,
@@ -38,13 +51,14 @@ export function AnimatedBackground() {
       delay: rand(0, 8),
       duration: rand(28, 46),
       drift: rand(18, 40),
-      rotate: rand(-75, 75), // Increased tilt range
+      rotate: rand(-75, 75),
     }));
-  }, []);
+  }, [hydrated, ghostCount]);
 
   const pollen = useMemo<Pollen[]>(() => {
+    if (!hydrated) return [];
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
-    return Array.from({ length: 22 }, (_, i) => ({
+    return Array.from({ length: pollenCount }, (_, i) => ({
       id: 100 + i,
       left: `${rand(0, 100)}%`,
       top: `${rand(0, 100)}%`,
@@ -53,11 +67,11 @@ export function AnimatedBackground() {
       duration: rand(14, 26),
       drift: rand(30, 80),
     }));
-  }, []);
+  }, [hydrated, pollenCount]);
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background">
-      {/* Warm golden radial washes */}
+      {/* Warm golden radial washes — SSR-safe, no randomness */}
       <div
         className="absolute inset-0"
         style={{
@@ -66,14 +80,15 @@ export function AnimatedBackground() {
         }}
       />
 
-      {/* Slow-drifting golden orbs for depth */}
+      {/* Slow-drifting golden orbs — same on server + client */}
       <motion.div
         className="absolute -top-32 right-[-8%] h-[520px] w-[520px] rounded-full"
         style={{
           background: "radial-gradient(circle, rgba(240,201,137,0.28) 0%, transparent 65%)",
           filter: "blur(6px)",
+          willChange: "transform",
         }}
-        animate={{ x: [0, 30, -10, 0], y: [0, 20, -15, 0] }}
+        animate={reduce ? undefined : { x: [0, 30, -10, 0], y: [0, 20, -15, 0] }}
         transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
@@ -81,12 +96,14 @@ export function AnimatedBackground() {
         style={{
           background: "radial-gradient(circle, rgba(198,91,124,0.22) 0%, transparent 65%)",
           filter: "blur(8px)",
+          willChange: "transform",
         }}
-        animate={{ x: [0, -20, 15, 0], y: [0, -15, 20, 0] }}
+        animate={reduce ? undefined : { x: [0, -20, 15, 0], y: [0, -15, 20, 0] }}
         transition={{ duration: 34, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Ghost gerberas — the real signature */}
+      {/* Ghost gerberas — client-only to avoid hydration mismatch.
+          Static blur (no per-frame filter animation) for GPU-friendly motion. */}
       {ghosts.map((g) => (
         <motion.img
           key={g.id}
@@ -102,15 +119,20 @@ export function AnimatedBackground() {
             height: g.size,
             opacity: g.opacity,
             filter: `blur(${g.blur}px) saturate(0.7) hue-rotate(-8deg)`,
-            mixBlendMode: "screen",
+            mixBlendMode: isMobile ? "normal" : "screen",
+            willChange: "transform",
           }}
-          initial={{ rotate: g.rotate }}
-          animate={{
-            y: [0, -g.drift, g.drift * 0.6, 0],
-            x: [0, g.drift * 0.4, -g.drift * 0.3, 0],
-            rotate: [g.rotate, g.rotate + 12, g.rotate - 6, g.rotate],
-            scale: [1, 1.04, 0.98, 1],
-          }}
+          initial={{ rotate: g.rotate, x: 0, y: 0 }}
+          animate={
+            reduce
+              ? undefined
+              : {
+                  y: [0, -g.drift, g.drift * 0.6, 0],
+                  x: [0, g.drift * 0.4, -g.drift * 0.3, 0],
+                  rotate: [g.rotate, g.rotate + 12, g.rotate - 6, g.rotate],
+                  scale: [1, 1.04, 0.98, 1],
+                }
+          }
           transition={{
             duration: g.duration,
             delay: g.delay,
@@ -120,7 +142,7 @@ export function AnimatedBackground() {
         />
       ))}
 
-      {/* Golden pollen dots */}
+      {/* Golden pollen dots — client-only */}
       {pollen.map((p) => (
         <motion.span
           key={p.id}
@@ -133,12 +155,17 @@ export function AnimatedBackground() {
             background: "rgba(240,201,137,0.85)",
             boxShadow: "0 0 8px rgba(240,201,137,0.7)",
             mixBlendMode: "screen",
+            willChange: "transform, opacity",
           }}
-          animate={{
-            y: [0, -p.drift, -p.drift * 0.4, -p.drift * 1.2, 0],
-            x: [0, p.drift * 0.3, -p.drift * 0.2, p.drift * 0.4, 0],
-            opacity: [0.15, 0.9, 0.4, 0.7, 0.15],
-          }}
+          animate={
+            reduce
+              ? undefined
+              : {
+                  y: [0, -p.drift, -p.drift * 0.4, -p.drift * 1.2, 0],
+                  x: [0, p.drift * 0.3, -p.drift * 0.2, p.drift * 0.4, 0],
+                  opacity: [0.15, 0.9, 0.4, 0.7, 0.15],
+                }
+          }
           transition={{
             duration: p.duration,
             delay: p.delay,
@@ -148,7 +175,7 @@ export function AnimatedBackground() {
         />
       ))}
 
-      {/* Subtle vignette to keep content readable */}
+      {/* Subtle vignette */}
       <div
         className="absolute inset-0"
         style={{

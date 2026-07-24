@@ -17,6 +17,8 @@ import logoUrl from "@/assets/logo.png";
 import { AnimatedBackground } from "@/components/visuals/AnimatedBackground";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { FloatingChat } from "@/components/chat/FloatingChat";
+
 
 function NotFoundComponent() {
   return (
@@ -154,22 +156,21 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-/** Page transition variants */
+/** Page transition variants — GPU-friendly (opacity + transform only). */
 const pageVariants = {
-  initial: { opacity: 0, y: 6, filter: "blur(4px)" },
+  initial: { opacity: 0, y: 8 },
   enter: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
   },
   exit: {
     opacity: 0,
     y: -4,
-    filter: "blur(2px)",
-    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+    transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
   },
 } as const;
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -205,7 +206,9 @@ function RootComponent() {
           </AnimatePresence>
         </main>
         <SiteFooter />
+        <FloatingChat />
       </div>
+
     </QueryClientProvider>
   );
 }

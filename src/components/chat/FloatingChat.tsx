@@ -38,7 +38,7 @@ export function FloatingChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="glass-panel fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] overflow-hidden"
+            className="glass-panel fixed bottom-[calc(env(safe-area-inset-bottom,0)+5.5rem)] right-4 z-50 w-[380px] max-w-[calc(100vw-2rem)] overflow-hidden sm:right-6"
           >
             <div className="flex items-center justify-between border-b border-hairline/50 bg-gradient-to-r from-accent-rose/20 to-accent-gold/20 px-4 py-3">
               <div className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export function FloatingChat() {
         animate={{ scale: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
         onClick={() => setOpen((v) => !v)}
-        className="btn-primary-glow fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full"
+        className="btn-primary-glow fixed bottom-[calc(env(safe-area-inset-bottom,0)+1rem)] right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full sm:right-6 sm:bottom-6"
         aria-label={open ? "Close chat" : "Open chat with Nari"}
       >
         <AnimatePresence mode="wait">
