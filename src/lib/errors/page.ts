@@ -1,5 +1,16 @@
 export function renderErrorPage(error?: unknown): string {
-  const errorDetails = error instanceof Error ? (error.stack || error.message) : String(error || "");
+  let errorDetails = "";
+  if (error instanceof Error) {
+    errorDetails = error.stack || error.message;
+  } else if (typeof error === "object" && error !== null) {
+    try {
+      errorDetails = JSON.stringify(error, Object.getOwnPropertyNames(error), 2);
+    } catch {
+      errorDetails = String(error);
+    }
+  } else {
+    errorDetails = String(error || "");
+  }
   return `<!doctype html>
 <html lang="en">
   <head>
