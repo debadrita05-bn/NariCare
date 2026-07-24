@@ -168,8 +168,8 @@ export function ChatWindow({
               transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground leading-relaxed px-4"
             >
-              I can read your assessment timeline and tracker logs. Ask me anything — about a
-              symptom that's been on your mind, or what to raise at your next doctor visit.
+              Ask me anything — about a symptom that's been on your mind, or what to raise at
+              your next doctor visit.
             </motion.p>
 
             <motion.div
