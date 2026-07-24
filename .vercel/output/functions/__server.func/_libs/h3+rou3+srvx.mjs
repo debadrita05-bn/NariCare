@@ -669,4 +669,4 @@ var H3Core = class {
 };
 /%(?:25)*(?:2f|5c)/i.source;
 //#endregion
-export { NodeResponse as a, toRequest as i, HTTPError as n, FastURL as o, defineLazyEventHandler as r, H3Core as t };
+export { NodeResponse as a, toRequest as i, HTTPError as n, defineLazyEventHandler as r, H3Core as t };
